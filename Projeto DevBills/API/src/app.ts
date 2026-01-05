@@ -8,6 +8,6 @@ const app:FastifyInstance = Fastify({
 })
 
 //Plugins
-app.register(routes)
+app.register(routes, { prefix: '/api' })
 
 export default app

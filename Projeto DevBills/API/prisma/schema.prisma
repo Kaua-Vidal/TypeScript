@@ -27,7 +27,7 @@ model Category {
 
 model Transaction {
   id         String          @id @default(auto()) @map("_id") @db.ObjectId
-  desciption String
+  description String
   amount     Float
   date       DateTime
   type       TransactionType
@@ -37,7 +37,7 @@ model Transaction {
 
   //Relacionamento
 
-  Category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId
 
   @@index([userId, date])

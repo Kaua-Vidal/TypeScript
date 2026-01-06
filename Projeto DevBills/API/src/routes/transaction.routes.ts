@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
-import app from "../app";
+import  { zodToJsonSchema }  from "zod-to-json-schema" 
 import createTransaction from "../controllers/transactions/createTransaction.controller";
+import { createTransactionSchema } from "../schema/transaction.schema";
 
 
 const transactionRoutes = async(fastify: FastifyInstance): Promise<void> => {
@@ -8,7 +9,7 @@ const transactionRoutes = async(fastify: FastifyInstance): Promise<void> => {
         method: "POST",
         url: "/",
         schema: {
-            
+            body: zodToJsonSchema(createTransactionSchema) as unknown as object
         },
         handler: createTransaction
     })

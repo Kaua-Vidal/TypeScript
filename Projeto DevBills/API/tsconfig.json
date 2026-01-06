@@ -15,7 +15,8 @@
     "skipLibCheck": true, // Evita checar tipos de pacotes em node_modules (melhora o desempenho da build)
     "forceConsistentCasingInFileNames": true, // Garante consistência entre letras maiúsculas e minúsculas nos caminhos dos arquivos
     "noFallthroughCasesInSwitch": true, // Impede erros ao esquecer de usar `break` nos `case` de `switch`
-    "noImplicitOverride": true // Garante que ao sobrescrever métodos, você use a palavra-chave `override` (mais seguro)
+    "noImplicitOverride": true, // Garante que ao sobrescrever métodos, você use a palavra-chave `override` (mais seguro)
+    "disableSizeLimit": true 
   },
   "include": [
     "src"

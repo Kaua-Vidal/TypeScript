@@ -1,8 +1,8 @@
 import type { FastifyReply, FastifyRequest } from "fastify"
-import { createTransactionSchema } from '../../schema/transaction.schema'
+import { CreateTransactions, createTransactionSchema } from '../../schema/transaction.schema'
 import prisma from "../../config/prisma"
 
-const createTransaction = async(request: FastifyRequest, reply: FastifyReply): Promise<void> => {
+const createTransaction = async(request: FastifyRequest <{Body: CreateTransactions}>, reply: FastifyReply): Promise<void> => {
     const userId = "3lkj1lk2j0" // userId -> request.userId
 
     if (!userId) {

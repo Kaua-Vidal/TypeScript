@@ -1,4 +1,4 @@
-import * as z from "zod" //Serve para validação, estilo YUP no React
+import {z} from "zod" //Serve para validação, estilo YUP no React
 import { ObjectId } from 'mongodb'
 import { TransactionType } from "@prisma/client";
 
@@ -12,7 +12,7 @@ export const createTransactionSchema = z.object({
     amount: z.number().positive("Valor deve ser positivo"),
 
     date: z.coerce.date({
-        error: () => ({ message: "Data inválida"})
+        errorMap: () => ({ message: "Data inválida"})
     }),
 
     categoryId: z.string().refine(isValidObjectId, {
@@ -20,11 +20,25 @@ export const createTransactionSchema = z.object({
     }),
 
     type: z.enum([TransactionType.expense, TransactionType.income], {
-        error: () => ({ message: "Data inválida" }),
+        errorMap: () => ({ message: "Data inválida" }),
     }),
 })
 
-// desciption String
-//   amount     Float
-//   date       DateTime
-//   type       TransactionType
+export type CreateTransactions = z.infer<typeof createTransactionSchema>
+
+export const getTransactionSchema = z.object({
+    month: z.string().optional(),
+
+    year: z.string().optional(),
+
+    type: z.enum([TransactionType.expense, TransactionType.income], {
+        errorMap: () => ({ message: "Data inválida" }),
+    }).optional(),
+    
+    categoryId: z.string().refine(isValidObjectId, {
+        message: "Categoria inválida",
+    }).optional(),
+
+})
+
+export type GetTransactionsQuery = z.infer<typeof getTransactionSchema>

@@ -1,10 +1,13 @@
 import Fastify from "fastify";
 import type { FastifyInstance } from "fastify";
 import routes from './routes/index.js';
+import { env } from "./config/env.js";
 
 
 const app:FastifyInstance = Fastify({
-    logger: true
+    logger: {
+        level: env.NODE_ENV === 'dev' ? 'info' : 'error',
+    }
 })
 
 //Plugins

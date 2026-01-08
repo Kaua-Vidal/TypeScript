@@ -16,4 +16,4 @@ const transactionRoutes = async(fastify: FastifyInstance): Promise<void> => {
     
 }
 
-export default transactionRoutes
+export default transactionRoutes;

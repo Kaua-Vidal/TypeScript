@@ -1,8 +1,11 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { getTransactionsSummaryQuery } from "../../schema/transaction.schema";
+import type { getTransactionsSummaryQuery } from "../../schema/transaction.schema";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc'
 import prisma from "../../config/prisma";
+import type { CategorySummary } from "../../types/category.tipes";
+import { TransactionType } from "@prisma/client";
+import type { TransactionSummary } from "../../types/transaction.types";
 
 
 dayjs.extend(utc)
@@ -46,9 +49,42 @@ export const getTransactionsSummary = async(
             }
         })
 
-        console.log(transactions)
+        let totalExpenses = 0;
+        let totalIncomes = 0;
+        const groupedExpenses = new Map<string, CategorySummary>()
 
-        reply.send(transactions)
+        for(const transaction of transactions) {
+
+            if(transaction.type === TransactionType.expense) {
+                const existing = groupedExpenses.get(transaction.categoryId) ?? {
+                    categoryId: transaction.categoryId,
+                    categoryName: transaction.category.name,
+                    categoryColor: transaction.category.color,
+                    amount: 0,
+                    percentage: 0,
+                }
+
+                existing.amount += transaction.amount
+                groupedExpenses.set(transaction.categoryId, existing)
+                
+
+                totalExpenses += transaction.amount
+            } else {
+                totalIncomes += transaction.amount
+            }
+        }
+
+        const summary: TransactionSummary = {
+            totalExpenses,
+            totalIncomes,
+            balance: Number((totalIncomes - totalExpenses).toFixed(2)),
+            expensesByCategory: Array.from(groupedExpenses.values()).map((entry) => ({
+                ...entry, 
+                percentage: Number.parseFloat(((entry.amount / totalExpenses) * 100).toFixed(2))
+            })).sort( (a,b) => b.amount - a.amount),
+        }
+        
+        reply.send(summary)
     } catch (err) {
         request.log.error("Erro ao trazer transações")
         reply.status(500).send({ error: "Erro do servidor"})
@@ -56,3 +92,10 @@ export const getTransactionsSummary = async(
 
 
 }
+
+/**
+ * groupedExpenses.get(transaction.categoryId) ?? {...
+ * o "??" serve como um "&&" ao contrário, onde o & diz que:
+ * Se for verdeiro, faça isso{...}
+ * Já o ?? é: Se for falso, faça isso{...}
+ */

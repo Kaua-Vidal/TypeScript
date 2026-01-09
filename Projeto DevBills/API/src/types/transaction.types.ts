@@ -1,4 +1,5 @@
 import type { TransactionType } from "@prisma/client"
+import type { CategorySummary } from "./category.tipes";
 
 export interface TransactionFilter {
     userId: string,
@@ -11,3 +12,10 @@ export interface TransactionFilter {
 }
 
 //se usa uma ? é porque não é obrigatório
+
+export interface TransactionSummary {
+    totalExpenses: number;
+    totalIncomes: number;
+    balance: number;
+    expensesByCategory: CategorySummary[]
+}

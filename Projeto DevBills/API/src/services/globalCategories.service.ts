@@ -37,7 +37,7 @@ export const initializeGlobalCategories = async(): Promise<Category[]> => {
                 const newCategory = await prisma.category.create({
                     data: category
                 })
-                console.log(`Criada: ${newCategory.name}`)
+
                 createdCategories.push(newCategory)
             } else {
                 createdCategories.push(existing)

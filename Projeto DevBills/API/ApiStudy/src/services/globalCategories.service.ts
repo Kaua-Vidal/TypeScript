@@ -45,7 +45,7 @@ export const initializeGlobalCategories = async(): Promise<Category[]> => {
 
         
     }
-    console.log("Todas as categorias inicializadas")
+    console.log("Todas as categorias inicializadas!!")
 
     return createdCategories
 }

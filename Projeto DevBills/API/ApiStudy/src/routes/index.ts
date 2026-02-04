@@ -7,7 +7,7 @@ async function routes(fastify: FastifyInstance): Promise<void> {
     fastify.get('/health', async() => {
         return {
             status: 'ok',
-            message: 'DevBills API Rodando normalmente'
+            message: 'DevBills API Rodando com sucesso'
         }
     })
 
